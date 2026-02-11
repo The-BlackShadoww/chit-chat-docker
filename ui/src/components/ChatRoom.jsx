@@ -19,6 +19,10 @@ function ChatRoom({ username, room }) {
             setMessages((prev) => [...prev, data]);
         });
 
+        socket.on("load_messages", (loadedMessages) => {
+            setMessages(loadedMessages);
+        });
+
         socket.on("user_typing", (user) => {
             setTypingMsg(`${user} is typing...`);
             setTimeout(() => setTypingMsg(""), 2000);
@@ -26,6 +30,7 @@ function ChatRoom({ username, room }) {
 
         return () => {
             socket.off("receive_message");
+            socket.off("load_messages");
             socket.off("user_typing");
         };
     }, [room]);
@@ -50,7 +55,7 @@ function ChatRoom({ username, room }) {
     };
 
     const handleTyping = () => {
-        socket.emit('typing', {username, room});
+        socket.emit('typing', { username, room });
     }
 
     return (

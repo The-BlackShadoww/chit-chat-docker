@@ -5,6 +5,8 @@ services:
     ports:
       - "3001:3001"
     restart: always
+    volumes:
+      - ./server/chat.db:/app/chat.db
 
   client:
     build: ./ui
